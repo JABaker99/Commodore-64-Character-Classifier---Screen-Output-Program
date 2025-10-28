@@ -1,3 +1,6 @@
+; Author: Jacob Baker
+; Date: 2025-10-28
+
 ; 10 SYS (2304)
 
 *=$0801
@@ -9,6 +12,60 @@ PRINTLINE=$AB1E
 *=$0900
 
 PROGRAM_START
+
+        ;Step 0: Swaps colors of background and the Ready text also added name/date at top
+        LDA $D021
+        STA $0286
+        LDA $D020
+        STA $D021
+
+        ; Step 1: print the letters in Input String
+        LDX #0
+
+PRINT_LOOP
+        LDA INPUT_STRING,X
+        sta CURRENT_LETTER
+        lda #0
+        sta CURRENT_LETTER+1
+        stx X_TEMP
+        lda #<CURRENT_LETTER
+        ldy #>CURRENT_LETTER
+        jsr PRINTLINE
+
+        ; Step 2: Made output PRINTLINE to screen if charcter was a letter
+        lda CURRENT_LETTER
+        cmp #"a"
+        bmi not_letter
+        cmp #"z"
+        bpl not_letter
+        lda #<IS_LETTER_MESSAGE
+        ldy #>IS_LETTER_MESSAGE
+        jsr PRINTLINE
+        jmp end_of_process_printline
+not_letter
+
+        ; Step 3: Made output PRINTLINE to screen if charcter was a number
+        lda CURRENT_LETTER
+        cmp #"0"
+        bmi not_number
+        cmp #"9"
+        bpl not_number
+        lda #<IS_NUMBER_MESSAGE
+        ldy #>IS_NUMBER_MESSAGE
+        jsr PRINTLINE
+        jmp end_of_process_printline
+not_number
+
+        ; Step 4: Else clause for output PRINTLINE to screen if something else
+        lda #<IS_SOMETHING_ELSE_MESSAGE
+        ldy #>IS_SOMETHING_ELSE_MESSAGE
+        jsr PRINTLINE
+
+end_of_process_printline
+        ldx X_TEMP
+        inx
+        cpx #15
+        bne PRINT_LOOP
 
 PROGRAM_END
         rts

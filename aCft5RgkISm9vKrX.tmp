@@ -1,3 +1,5 @@
+##{0:0:0:Main.prg}C:\Users\jb00645\Desktop\HW13Starter\HW13\Main.asm
+
 ; Author: Jacob Baker
 ; Date: 2025-10-28
 
@@ -19,7 +21,7 @@ PROGRAM_START
         LDA $D020
         STA $D021
 
-        ; Step 1: print the letters in Input String
+; Step 1: print the letters in Input String
         LDX #0
 
 PRINT_LOOP
@@ -32,7 +34,7 @@ PRINT_LOOP
         ldy #>CURRENT_LETTER
         jsr PRINTLINE
 
-        ; Step 2: Made output PRINTLINE to screen if charcter was a letter
+        ; step 2
         lda CURRENT_LETTER
         cmp #"a"
         bmi not_letter
@@ -80,3 +82,4 @@ IS_NUMBER_MESSAGE
 IS_SOMETHING_ELSE_MESSAGE
         text " <-- is some other character"
         byte 13, 00
+

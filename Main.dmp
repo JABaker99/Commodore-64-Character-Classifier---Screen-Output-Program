@@ -1,0 +1,109 @@
+00001  0000             ; AUTHOR: JACOB BAKER
+00002  0001             ; DATE: 2025-10-28
+00003  0001             
+00004  0001             ; 10 SYS (2304)
+00005  0001             
+00006  0001             *=$0801
+00007  0801             
+00008  0801  0E 08 0A              BYTE    $0E, $08, $0A, $00, $9E, $20, $28,  $32, $33, $30, $34, $29, $00, $00, $00
+00009  0810             
+00010  0810             
+00011  0810             PRINTLINE=$AB1E 
+00012  0810             *=$0900
+00013  0900             
+00014  0900             PROGRAM_START 
+00015  0900             
+00016  0900                        ;STEP 0: SWAPS COLORS OF BACKGROUND AND THE READY TEXT ALSO ADDED NAME/DATE AT TOP
+00017  0900  AD 21 D0              LDA $D021
+00018  0903  8D 86 02              STA $0286
+00019  0906  AD 20 D0              LDA $D020
+00020  0909  8D 21 D0              STA $D021
+00021  090C             
+00022  090C             ; STEP 1: PRINT THE LETTERS IN INPUT STRING
+00023  090C  A2 00                 LDX #0
+00024  090E             
+00025  090E             PRINT_LOOP 
+00026  090E  BD 44 09              LDA INPUT_STRING,X
+00027  0911  8D 41 09              STA CURRENT_LETTER
+00028  0914  A9 00                 LDA #0
+00029  0916  8D 42 09              STA CURRENT_LETTER+1
+00030  0919  8E 43 09              STX X_TEMP
+00031  091C  A9 41                 LDA #<CURRENT_LETTER
+00032  091E  A0 09                 LDY #>CURRENT_LETTER
+00033  0920  20 1E AB              JSR PRINTLINE
+00034  0923             
+00035  0923                        ; STEP 2
+00036  0923  AD 41 09              LDA CURRENT_LETTER
+00037  0926  C9 41                 CMP #"A"
+00038  0928  30 0E                 BMI NOT_LETTER
+00039  092A  C9 5A                 CMP #"Z"
+00040  092C  10 0A                 BPL NOT_LETTER
+00041  092E  A9 53                 LDA #<IS_LETTER_MESSAGE
+00042  0930  A0 09                 LDY #>IS_LETTER_MESSAGE
+00043  0932  20 1E AB              JSR PRINTLINE
+00044  0935  4C 38 09              JMP END_OF_PROCESS_PRINTLINE
+00045  0938             NOT_LETTER 
+00046  0938             
+00047  0938             END_OF_PROCESS_PRINTLINE 
+00048  0938  AE 43 09              LDX X_TEMP
+00049  093B  E8                    INX
+00050  093C  E0 0F                 CPX #15
+00051  093E  D0 CE                 BNE PRINT_LOOP
+00052  0940             
+00053  0940             PROGRAM_END 
+00054  0940  60                    RTS
+00055  0941             
+00056  0941             ; VARIABLE USED TO PRINT THE CURRENT LETTER
+00057  0941             CURRENT_LETTER 
+00058  0941  00                    BYTE 00
+00059  0942  00                    BYTE 00
+00060  0943             
+00061  0943             ; USE THIS TO SAVE A COPY OF X (THE LOOP COUNTER)
+00062  0943             X_TEMP
+00063  0943  00                    BYTE 00
+00064  0944             
+00065  0944             ; OUR INPUT STRING TO PROCESS
+00066  0944             INPUT_STRING 
+00067  0944  40 35 35              TEXT ""@553MB1Y R0CKS!"
+00068  0953             
+00069  0953             ; MESSAGE TO PRINT WHEN A LETTER IS ENCOUNTERED
+00070  0953             IS_LETTER_MESSAGE 
+00071  0953  20 3C 2D              TEXT " <-- IS A LETTER"
+00072  0963  0D 00                 BYTE 13, 00
+00073  0965             
+00074  0965             ; MESSAGE TO PRINT WHEN A NUMBER IS ENCOUNTERED
+00075  0965             IS_NUMBER_MESSAGE 
+00076  0965  20 3C 2D              TEXT " <-- IS A NUMBER"
+00077  0975  0D 00                 BYTE 13, 00
+00078  0977             
+00079  0977             ; MESSAGE TO PRINT WHEN SOMETHING OTHER THAN A LETTER/NUMBER IS ENCOUNTERED
+00080  0977             IS_SOMETHING_ELSE_MESSAGE 
+00081  0977  20 3C 2D              TEXT " <-- IS SOME OTHER CHARACTER"
+00082  0993  0D 00                 BYTE 13, 00
+00083  0995             
+
+******* 11 Label(s) *******
+CURRENT_LETTER = $0941 
+end_of_process_printline = $0938 
+INPUT_STRING = $0944 
+IS_LETTER_MESSAGE = $0953 
+IS_NUMBER_MESSAGE = $0965 
+IS_SOMETHING_ELSE_MESSAGE = $0977 
+not_letter = $0938 
+PRINT_LOOP = $090E 
+PROGRAM_END = $0940 
+PROGRAM_START = $0900 
+X_TEMP = $0943 
+
+******* 4 Unused label(s) *******
+IS_NUMBER_MESSAGE
+IS_SOMETHING_ELSE_MESSAGE
+PROGRAM_END
+PROGRAM_START
+
+******* 2 Variable(s) *******
+PRINTLINE  = $AB1E
+tgt_c64  = $0001
+******* 1 Unused variables(s) *******
+tgt_c64
+

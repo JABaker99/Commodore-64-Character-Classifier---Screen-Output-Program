@@ -56,6 +56,10 @@ not_letter
         jmp end_of_process_printline
 not_number
 
+        ; Step 4: Else clause for output PRINTLINE to screen if something else
+        lda #<IS_SOMETHING_ELSE_MESSAGE
+        ldy #>IS_SOMETHING_ELSE_MESSAGE
+        jsr PRINTLINE
 
 end_of_process_printline
         ldx X_TEMP

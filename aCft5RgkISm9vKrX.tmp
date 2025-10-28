@@ -21,7 +21,7 @@ PROGRAM_START
         LDA $D020
         STA $D021
 
-; Step 1: print the letters in Input String
+        ; Step 1: print the letters in Input String
         LDX #0
 
 PRINT_LOOP
@@ -34,7 +34,7 @@ PRINT_LOOP
         ldy #>CURRENT_LETTER
         jsr PRINTLINE
 
-        ; step 2
+        ; Step 2: Made output PRINTLINE to screen if charcter was a letter
         lda CURRENT_LETTER
         cmp #"a"
         bmi not_letter
@@ -45,6 +45,23 @@ PRINT_LOOP
         jsr PRINTLINE
         jmp end_of_process_printline
 not_letter
+
+        ; Step 3: Made output PRINTLINE to screen if charcter was a number
+        lda CURRENT_LETTER
+        cmp #"0"
+        bmi not_number
+        cmp #"9"
+        bpl not_number
+        lda #<IS_NUMBER_MESSAGE
+        ldy #>IS_NUMBER_MESSAGE
+        jsr PRINTLINE
+        jmp end_of_process_printline
+not_number
+
+;step 4
+        lda #<IS_SOMETHING_ELSE_MESSAGE
+        ldy #>IS_SOMETHING_ELSE_MESSAGE
+        jsr PRINTLINE
 
 end_of_process_printline
         ldx X_TEMP

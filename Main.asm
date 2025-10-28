@@ -44,6 +44,19 @@ PRINT_LOOP
         jmp end_of_process_printline
 not_letter
 
+        ; Step 3: Made output PRINTLINE to screen if charcter was a number
+        lda CURRENT_LETTER
+        cmp #"0"
+        bmi not_number
+        cmp #"9"
+        bpl not_number
+        lda #<IS_NUMBER_MESSAGE
+        ldy #>IS_NUMBER_MESSAGE
+        jsr PRINTLINE
+        jmp end_of_process_printline
+not_number
+
+
 end_of_process_printline
         ldx X_TEMP
         inx
